@@ -1,2 +1,2 @@
-class StudentViewModelFIle {
+class StudentViewModelFile {
 }
