@@ -29,9 +29,8 @@ fun MainWindowStudents(
     icon: Painter,
     windowState: WindowState,
     resizable: Boolean,
-    fileManagement: IFiles,
-    studentsFile: File,
-    onCloseMainWindow: () -> Unit,
+    studentViewModel: IStudentViewModel,
+    onCloseMainWindow: () -> Unit
 ) {
     Window(
         onCloseRequest = onCloseMainWindow,
@@ -45,7 +44,7 @@ fun MainWindowStudents(
                 color = colorWindowBackground,
                 modifier = Modifier.fillMaxSize()
             ) {
-                StudentScreen(fileManagement, studentsFile)
+                StudentScreen(studentViewModel)
             }
         }
     }
@@ -71,7 +70,6 @@ fun GetWindowState(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AddNewStudent(
     newStudent: String,
@@ -83,14 +81,6 @@ fun AddNewStudent(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(end = 20.dp)
-            .onKeyEvent { event ->
-                if (event.type == KeyEventType.KeyUp && event.key == Key.Enter) {
-                    onButtonAddNewStudentClick()
-                    true // Consumimos el evento
-                } else {
-                    false // No consumimos el evento
-                }
-            }
     ) {
         StudentTextField(
             newStudent = newStudent,
@@ -143,7 +133,6 @@ fun AddStudentButton(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun StudentList(
     studentsState: List<String>,
@@ -303,12 +292,12 @@ fun SaveChangesButton(
 }
 
 @Composable
-fun InfoMessage(message: String, onDismiss: () -> Unit) {
-    Dialog(
+fun InfoMessage(message: String, onCloseInfoMessage: () -> Unit) {
+    DialogWindow(
         icon = painterResource("info_icon.png"),
         title = "Atención",
         resizable = false,
-        onCloseRequest = onDismiss
+        onCloseRequest = onCloseInfoMessage
     ) {
         Box(
             contentAlignment = Alignment.Center,
